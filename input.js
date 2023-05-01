@@ -1,29 +1,39 @@
-// setup interface to handle user input from stdin
-const setupInput = function (conn) {
-    connection = conn;
-    const stdin = process.stdin;
-    stdin.setRawMode(true);
-    stdin.setEncoding("utf8");
-    stdin.resume();
-    stdin.on("data", handleUserInput);
-    return stdin;
+let connection;
+
+const setupInput = function(conn) {
+  connection = conn;
+  const stdin = process.stdin;
+  stdin.setRawMode(true);
+  stdin.setEncoding("utf8");
+  stdin.resume();
+  stdin.on("data", handleUserInput);
+  return stdin;
 };
 
-const handleUserInput = function (key) {
-    if (key === "w") {
-        connection.write("Move: up");
+const handleUserInput = function(key) {
+  if (key === "\u0003") {
+    process.exit();
+  }
+  const moves = {
+    "w": "Move: up",
+    "a": "Move: left",
+    "s": "Move: down",
+    "d": "Move: right",
+  };
+  for (const move in moves) {
+    if (key === move) {
+      connection.write(moves[move]);
     }
-    if (key === "a") {
-        connection.write("Move: left");
+  }
+  const messages = {
+    "1": "Say: Hi there!",
+    "2": "Say: Let's play!",
+    "3": "Say: Good game!"
+  };
+  for (const message in messages) {
+    if (key === message) {
+      connection.write(messages[message]);
     }
-    if (key === "s") {
-        connection.write("Move: down");
-    };
-    if (key === "d") {
-        connection.write("Move: right");
-    };
-    if (key === "\u0003") {
-        process.exit();
-    }
+  }
 };
 module.exports = { setupInput };
