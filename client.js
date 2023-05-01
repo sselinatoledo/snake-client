@@ -14,7 +14,7 @@ const connect = function() {
     conn.write("Name: SLT");
     // setInterval(() => {
     //   conn.write("Move: up");
-    // }, 1000);        
+    // }, 1000);
   });
 
   conn.on("data", (data) => {
